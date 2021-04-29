@@ -1,9 +1,12 @@
 package com.springjdbc._spring.jpa.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,10 +31,10 @@ public class EmployeeController {
 		return "employee saved";
 	}
 
-	@GetMapping("/getEmployee")
-	public List<Employee> getEmpList(){
-		return empRepo.findAll();
-	}
+//	@GetMapping("/getEmployee")
+//	public List<Employee> getEmpList(){
+//		return empRepo.findAll();
+//	}
 
 	@DeleteMapping("/deleteEmp/{id}")
 	public String deleteEmployee(@PathVariable int id) {
@@ -60,6 +63,17 @@ public class EmployeeController {
 		empRepo.updateEmployeeNameByCity(name, city);
 		return "names updated";
 
+	}
+	
+	//Standardizing response(jUnit)
+	
+	@GetMapping("/getEmployee")
+	public ResponseEntity<?> getEmpList(){
+		List<Employee> lst = empRepo.findAll();
+		HashMap<String, Object> map = new HashMap();
+		map.put("result", lst);
+		map.put("status", HttpStatus.OK.value());
+		return ResponseEntity.ok(map);
 	}
 
 }
